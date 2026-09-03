@@ -7,14 +7,15 @@ import {
 } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import Link from "next/link";
+import { loginAction } from "../_actions/authActions";
 
 export default function LoginForm() {
   return (
-    <form>
+    <form action={loginAction}>
       <FieldGroup>
         <Field>
           <FieldLabel htmlFor="email">Email</FieldLabel>
-          <Input id="email" type="email" placeholder="m@example.com" required />
+          <Input name="email" id="email" type="email" placeholder="m@example.com" required />
         </Field>
         <Field>
           <div className="flex items-center">
@@ -23,7 +24,7 @@ export default function LoginForm() {
               Forgot your password?
             </span>
           </div>
-          <Input id="password" type="password" required />
+          <Input name="password" id="password" type="password" required />
         </Field>
         <Field>
           <Button type="submit">Login</Button>
