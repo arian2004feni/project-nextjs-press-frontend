@@ -1,3 +1,5 @@
+"use client";
+
 import { Button } from "@/components/ui/button";
 import {
   Field,
@@ -8,14 +10,29 @@ import {
 import { Input } from "@/components/ui/input";
 import Link from "next/link";
 import { loginAction } from "../_actions/authActions";
+import { useActionState, useEffect } from "react";
+import { toast } from "sonner";
 
 export default function LoginForm() {
+  const [state, action, isPending] = useActionState(loginAction, false);
+  useEffect(() => {
+    if (!state) return;
+    if (!state.success) toast.error(state.message || "login error");
+    if (state.success) toast.success(state.message || "login succeeded");
+  }, [state]);
+
   return (
-    <form action={loginAction}>
+    <form action={action}>
       <FieldGroup>
         <Field>
           <FieldLabel htmlFor="email">Email</FieldLabel>
-          <Input name="email" id="email" type="email" placeholder="m@example.com" required />
+          <Input
+            name="email"
+            id="email"
+            type="email"
+            placeholder="m@example.com"
+            required
+          />
         </Field>
         <Field>
           <div className="flex items-center">
@@ -27,7 +44,7 @@ export default function LoginForm() {
           <Input name="password" id="password" type="password" required />
         </Field>
         <Field>
-          <Button type="submit">Login</Button>
+          <Button type="submit">{isPending ? "Submitting..." : "Login"}</Button>
           <Button variant="outline" type="button">
             Login with Google
           </Button>
