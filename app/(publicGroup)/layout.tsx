@@ -1,7 +1,7 @@
 import { Navbar } from "@/components/shared/Navbar";
 import { getMe } from "@/services/getMe";
 
-export default async function DashboardGroupLayout({
+export default async function PublicGroupLayout({
   children,
 }: {
   children: React.ReactNode;
