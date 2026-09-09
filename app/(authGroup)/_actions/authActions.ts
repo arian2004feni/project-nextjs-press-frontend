@@ -49,7 +49,7 @@ export const loginAction = async (
       maxAge: 60 * 60 * 24,
       sameSite: "lax",
     });
-    cookieStore.set("refreshToken", result.data.accessToken, {
+    cookieStore.set("refreshToken", result.data.refreshToken, {
       httpOnly: true,
       maxAge: 60 * 60 * 24 * 7,
       sameSite: "lax",
