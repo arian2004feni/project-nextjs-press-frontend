@@ -4,6 +4,7 @@ import type { NextRequest } from "next/server";
 import { JwtPayload } from "jsonwebtoken";
 import { jwtUtils } from "./utils/jwt";
 import { getNewAccessToken } from "./services/refreshToken";
+import { getSubscriptionStatus } from "./app/(publicGroup)/_actions/getSubscriptionStatus";
 
 const AUTH_ROUTES = ["/login", "/register"];
 // const PUBLIC_ROUTES = ["/", "/news", "/login", "/register"];
@@ -29,9 +30,9 @@ export async function proxy(request: NextRequest) {
       )
     : null;
 
-    if (!decodedAccessToken?.success && decodedRefreshToken?.success) {
+  if (!decodedAccessToken?.success && decodedRefreshToken?.success) {
     const result = await getNewAccessToken();
-    
+
     if (result.success) {
       const newAccessToken = result.data.accessToken;
       cookieStore.set("accessToken", newAccessToken, {
@@ -93,6 +94,28 @@ export async function proxy(request: NextRequest) {
   } else if (pathname.startsWith("/admin-dashboard") && userRole !== "ADMIN") {
     return NextResponse.redirect(new URL("/not-found", request.url));
   }
+
+  if (pathname === "/premium") {
+    const subscriptionStatus = await getSubscriptionStatus();
+    const isActive = Boolean(
+      subscriptionStatus.success && subscriptionStatus.data?.isSubscribed,
+    );
+
+    if (!isActive) {
+      return NextResponse.redirect(new URL("/payment", request.url));
+    }
+  }
+  // const subscriptionStatus = await getSubscriptionStatus();
+  // const isActive = Boolean(
+  //   subscriptionStatus.success && subscriptionStatus.data?.isSubscribed,
+  // );
+  // if (pathname === "/payment" && isActive) {
+  //   return NextResponse.redirect(new URL("/premium", request.url));
+  // }
+  // if (pathname === "/premium" && !isActive) {
+  //   return NextResponse.redirect(new URL("/payment", request.url));
+  // }
+
   // return NextResponse.redirect(new URL("/", request.url));
   return NextResponse.next();
 }
