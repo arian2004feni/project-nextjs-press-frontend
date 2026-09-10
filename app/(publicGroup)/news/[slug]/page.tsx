@@ -1,8 +1,8 @@
-export default async function NewsDetailsPage({
+export default async function NewsByIdPage({
   params,
 }: {
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  return <div>My Post: {slug}</div>;
+  return <div>NewsById: {slug}</div>;
 }
