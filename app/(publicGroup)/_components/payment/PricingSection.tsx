@@ -8,15 +8,10 @@ import {
 } from "@/components/ui/card";
 import { CheckIcon } from "lucide-react";
 import { SubscribeButton } from "./SubscribeButton";
+import { getSubscriptionStatus } from "../../_actions/getSubscriptionStatus";
 
 export async function PricingSection() {
-  const statusRes = {
-    success: true,
-    data: {
-      isSubscribed: false,
-      currentPeriodEnd: null,
-    },
-  };
+  const statusRes = await getSubscriptionStatus();
   const isActive = Boolean(statusRes.success && statusRes.data?.isSubscribed);
 
   return (
@@ -28,7 +23,7 @@ export async function PricingSection() {
         </CardTitle>
         <CardDescription>
           {isActive
-            ? `Renews on ${new Date().toLocaleDateString()}`
+            ? `Renews on ${new Date(statusRes.data.currentPeriodEnd).toLocaleDateString()}`
             : "Unlock every premium story, cancel anytime."}
         </CardDescription>
       </CardHeader>
