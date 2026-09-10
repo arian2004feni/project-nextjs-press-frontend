@@ -10,7 +10,14 @@ import { CheckIcon } from "lucide-react";
 import { SubscribeButton } from "./SubscribeButton";
 
 export async function PricingSection() {
-  const isActive = true; // Replace with actual logic to check if the user has an active subscription
+  const statusRes = {
+    success: true,
+    data: {
+      isSubscribed: false,
+      currentPeriodEnd: null,
+    },
+  };
+  const isActive = Boolean(statusRes.success && statusRes.data?.isSubscribed);
 
   return (
     <Card className="mx-auto max-w-md">
@@ -41,7 +48,6 @@ export async function PricingSection() {
           </li>
         </ul>
         {!isActive && <SubscribeButton />}
-        {/* {<SubscribeButton />} */}
       </CardContent>
     </Card>
   );
