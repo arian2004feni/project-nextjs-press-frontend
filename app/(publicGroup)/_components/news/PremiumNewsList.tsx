@@ -1,27 +1,9 @@
+import getPremiumPosts from "../../_actions/getPremiumPosts";
 import { NewsCard } from "./NewsCard";
 import { IPost } from "@/lib/types";
 
 export async function PremiumNewsList() {
-  const result = {
-    success: true,
-    data: [
-      {
-        id: "1",
-        title: "Premium News 1",
-        content: "This is the content of premium news 1.",
-        thumbnail: "https://via.placeholder.com/400x200",
-        isFeatured: false,
-        status: "PUBLISHED",
-        tags: ["tag1", "tag2"],
-        views: 100,
-        isPremium: true,
-        authorId: "author1",
-        createdAt: new Date().toISOString(),
-        updatedAt: new Date().toISOString(),
-      },
-    ],
-  };
-
+  const result = await getPremiumPosts();
   if (!result.success || !result.data?.length) {
     return (
       <p className="py-12 text-center text-muted-foreground">
@@ -33,8 +15,7 @@ export async function PremiumNewsList() {
   return (
     <div className="space-y-8">
       <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-        {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
-        {result.data.map((post: IPost | any) => (
+        {result.data.map((post: IPost) => (
           <NewsCard key={post.id} post={post} />
         ))}
       </div>

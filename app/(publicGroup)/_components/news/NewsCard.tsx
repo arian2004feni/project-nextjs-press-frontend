@@ -3,7 +3,6 @@ import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { IPost } from "@/lib/types";
 import { MessageSquareIcon, SparklesIcon } from "lucide-react";
-import Image from "next/image";
 
 type NewsCardProps = {
   post: IPost | any;
@@ -15,19 +14,19 @@ export function NewsCard({ post }: NewsCardProps) {
   return (
     <Card className="gap-4">
       {post.thumbnail && (
-        // <img
-        //     src={post.thumbnail}
-        //     alt={post.title}
-        //     className="h-48 w-full object-cover"
-        // />
-        <Image
-          src={post.thumbnail}
-          unoptimized
-          alt={post.title}
-          width={400}
-          height={400}
-          // fill
+        <img
+            src={post.thumbnail}
+            alt={post.title}
+            className="h-48 w-full object-cover"
         />
+        // <Image
+        //   src={post.thumbnail}
+        //   unoptimized
+        //   alt={post.title}
+        //   width={400}
+        //   height={400}
+        //   // fill
+        // />
       )}
       <CardHeader>
         <div className="flex flex-wrap items-center gap-1.5">
