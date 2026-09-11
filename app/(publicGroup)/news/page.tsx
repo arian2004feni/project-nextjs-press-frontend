@@ -1,8 +1,13 @@
 import { Suspense } from "react";
 import { NewsSkeleton } from "../_components/news/NewsSkeleton";
 import { PublicNewsList } from "../_components/news/PublicNewsList";
+import { NewsSearchBar } from "../_components/news/NewsSearchBar";
 
-export default function NewsPage() {
+export default async function NewsPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
+}) {
   return (
     <div className="mx-auto max-w-7xl space-y-6 px-4 py-10 sm:px-6 lg:px-8">
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
@@ -12,9 +17,10 @@ export default function NewsPage() {
             Browse the latest published stories.
           </p>
         </div>
+        <NewsSearchBar />
       </div>
       <Suspense fallback={<NewsSkeleton />}>
-        <PublicNewsList />
+        <PublicNewsList searchParams={searchParams} />
       </Suspense>
     </div>
   );

@@ -2,8 +2,13 @@ import { NewsCard } from "@/app/(publicGroup)/_components/news/NewsCard";
 import { IPost } from "@/lib/types";
 import getPublicPosts from "../../_actions/getPublicPosts";
 
-export async function PublicNewsList() {
-  const result = await getPublicPosts();
+export async function PublicNewsList({
+  searchParams,
+}: {
+  searchParams?: Promise<{ [key: string]: string | string[] | undefined }>;
+}) {
+  const query = await searchParams;
+  const result = await getPublicPosts({ query });
 
   if (!result.success || !result.data?.length) {
     return (
