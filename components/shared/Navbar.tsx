@@ -8,12 +8,13 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { LogOut, Settings, User } from "lucide-react";
+import { LayoutDashboard, LogOut, Settings, User } from "lucide-react";
 import Link from "next/link";
 import { Button } from "../ui/button";
 import logout from "@/services/logout";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
+import { NavbarProps } from "@/lib/types";
 
 // Navigation items configuration
 const navItems = [
@@ -27,37 +28,10 @@ const navItems = [
 
 // User menu items configuration
 const userMenuItems = [
+  { label: "Dashboard", icon: LayoutDashboard, action: "dashboard" },
   { label: "Profile", icon: User, action: "profile" },
   { label: "Settings", icon: Settings, action: "settings" },
 ];
-
-type IUser = {
-  success: boolean;
-  message: string;
-  data: {
-    profile: {
-      id: string;
-      name: string;
-      email: string;
-      activeStatus: string;
-      role: string;
-      createdAt: string;
-      updatedAt: string;
-      profile: {
-        id: string;
-        profilePhoto: string;
-        bio: string | null;
-        userId: string;
-        createdAt: string;
-        updatedAt: string;
-      };
-    };
-  };
-};
-
-type NavbarProps = {
-  user: IUser;
-};
 
 export function Navbar({ user }: NavbarProps) {
   const router = useRouter();
@@ -67,6 +41,13 @@ export function Navbar({ user }: NavbarProps) {
       await logout();
       toast.success("user Logged out Successfully");
       router.push("/login");
+    }
+
+    if (action == "dashboard") {
+      if (user.data.profile.role === "USER") router.push("/dashboard");
+      if (user.data.profile.role === "AUTHOR") router.push("/author-dashboard");
+      if (user.data.profile.role === "ADMIN") router.push("/admin-dashboard");
+      return;
     }
   };
 
@@ -105,8 +86,13 @@ export function Navbar({ user }: NavbarProps) {
                 </div>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end" className="w-56">
-                <DropdownMenuLabel className="font-normal">
-                  <div className="flex flex-col gap-1">
+                <DropdownMenuLabel className="font-normal flex gap-2">
+                  <div className="my-auto">
+                    <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center">
+                      <User className="w-4 h-4 text-primary" />
+                    </div>
+                  </div>
+                  <div className="flex flex-col">
                     <p className="text-sm font-medium">
                       {user.data.profile.name}
                     </p>
